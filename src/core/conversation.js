@@ -20,11 +20,12 @@ export const STATES = {
   ENDED: 'ENDED'
 };
 
-export function createSession({ config, callerId, afterHours = false }) {
+export function createSession({ config, callerId, afterHours = false, channel = 'voice' }) {
   return {
     config,
     callerId,
     afterHours,
+    channel, // 'voice' (phone) | 'chat' (web widget)
     state: STATES.GREET,
     patient: { name: null, age: null, phone: callerId || null, reason: null },
     options: [],
@@ -37,6 +38,9 @@ export function createSession({ config, callerId, afterHours = false }) {
 // The first thing the agent says when the AI flow starts (PRD 2.2.2 / 2.3.1).
 export function openingLine(session) {
   const name = session.config.practiceName;
+  if (session.channel === 'chat') {
+    return `Hi! Welcome to ${name}. I can book an appointment for you right here. Would you like to book an appointment?`;
+  }
   if (session.afterHours) {
     return `You've reached ${name}. Our office is currently closed, but I can help you book an appointment right now. Let's get started. Would you like to book an appointment?`;
   }
@@ -84,14 +88,27 @@ export async function advance(session, utterance) {
       if (!value) return reprompt(session, 'Could you tell me your age or date of birth?');
       session.patient.age = value;
       session.state = STATES.CONFIRM_PHONE;
-      const num = session.callerId || 'the number you are calling from';
+      // Phone: confirm caller ID (voice) or ask outright (chat / no caller ID).
+      if (!session.callerId) {
+        return { reply: 'Thanks. What is the best phone number to reach you?', done: false };
+      }
       return {
-        reply: `Thanks. I have your phone number as ${num}. Is that the best number to reach you, or would you like to give a different one?`,
+        reply: `Thanks. I have your phone number as ${session.callerId}. Is that the best number to reach you, or would you like to give a different one?`,
         done: false
       };
     }
 
     case STATES.CONFIRM_PHONE: {
+      // No caller ID (chat): the reply IS the phone number.
+      if (!session.callerId) {
+        const digits = utterance.replace(/[^\d+]/g, '');
+        if (digits.replace(/\D/g, '').length < 7) {
+          return reprompt(session, 'Could you give me a phone number we can reach you on?');
+        }
+        session.patient.phone = digits;
+        session.state = STATES.ASK_REASON;
+        return { reply: 'Got it. Briefly, what is the reason for your visit? For example a toothache, a cleaning, or a consultation.', done: false };
+      }
       const r = await extract('phoneConfirm', utterance);
       if (r.confirmed === false && r.phone) {
         session.patient.phone = r.phone;
@@ -154,10 +171,11 @@ export async function advance(session, utterance) {
       }
       session.state = STATES.ENDED;
       session.done = true;
+      const closer = session.channel === 'chat' ? 'Thanks for booking with us' : 'Thank you for calling';
       return {
         reply:
           `You're all booked for ${fmtSlot(session.chosenSlot, tz)}. We'll contact you if anything changes. ` +
-          'Thank you for calling, and have a great day!',
+          `${closer}, and have a great day!`,
         done: true
       };
     }

@@ -85,6 +85,24 @@ client config (use `primary` or the calendar's ID).
 Any SMTP provider works (SendGrid, Gmail app password, etc.). Set `SMTP_*` and
 `EMAIL_FROM`; recipient is the client config's `notificationEmail`.
 
+## Web chat widget (embed on a clinic's website)
+
+The same booking agent is available as an embeddable chat widget — a floating
+button the clinic adds with **one line** before `</body>`:
+
+```html
+<script src="https://yourapp.com/widget.js" data-client="demo-practice"></script>
+```
+
+Optional attributes: `data-color="#0a7"`, `data-position="left"`, `data-title="Book online"`.
+
+- Works on any platform (WordPress, Wix, Squarespace, custom HTML) — no platform access.
+- Hosted on your infra; `data-client` maps to the clinic's config.
+- Backed by `POST /chat` (`{ practiceId, sessionId?, message? }` → `{ sessionId, reply, done }`),
+  which drives the **same conversation engine** as the phone agent.
+
+**Try it locally:** `npm start`, then open <http://localhost:3000/demo.html> and click the 💬 button.
+
 ## Deploy to Render (one-click Blueprint)
 
 This repo ships a `render.yaml` Blueprint.

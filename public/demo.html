@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Zahnarztpraxis Köln-Mitte — Demo</title>
+  <style>
+    body{font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;margin:0;color:#1a1a1a}
+    .hero{background:#0d6efd;color:#fff;padding:70px 24px;text-align:center}
+    .hero h1{margin:0 0 8px;font-size:32px}
+    .wrap{max-width:720px;margin:40px auto;padding:0 24px;line-height:1.6}
+    .note{background:#f1f6ff;border:1px solid #cfe0ff;border-radius:10px;padding:16px 18px;margin-top:24px}
+    code{background:#eef0f3;padding:2px 6px;border-radius:5px}
+  </style>
+</head>
+<body>
+  <div class="hero">
+    <h1>Zahnarztpraxis Köln-Mitte</h1>
+    <p>Your dental practice in the heart of Cologne</p>
+  </div>
+  <div class="wrap">
+    <h2>Welcome</h2>
+    <p>This is a sample clinic website demonstrating the embeddable AI receptionist.
+       Click the <strong>💬 button</strong> in the bottom-right corner to book an
+       appointment by chat — the same agent that answers the phone.</p>
+    <div class="note">
+      <strong>How a clinic adds this:</strong> they paste one line before
+      <code>&lt;/body&gt;</code>:
+      <pre><code>&lt;script src="https://yourapp.com/widget.js" data-client="demo-practice"&gt;&lt;/script&gt;</code></pre>
+      That's it — no platform access, works on WordPress, Wix, Squarespace, or custom HTML.
+    </div>
+  </div>
+
+  <!-- The widget. In production data-client is the clinic's id. -->
+  <script src="/widget.js" data-client="demo-practice" data-title="Book an appointment"></script>
+</body>
+</html>
