@@ -1,0 +1,58 @@
+# Render Blueprint — deploy the AI Dental Receptionist Agent.
+# In Render: New → Blueprint → connect this repo. Render reads this file,
+# creates the web service, and prompts you for the secret values below.
+# Docs: https://render.com/docs/blueprint-spec
+
+services:
+  - type: web
+    name: dental-receptionist-agent
+    runtime: node
+    plan: free                 # bump to "starter" for always-on (free tier sleeps)
+    region: frankfurt          # closest to the Cologne pilot
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /health
+    autoDeploy: true           # redeploy on every push to the default branch
+    envVars:
+      - key: NODE_VERSION
+        value: "20"
+
+      # Public base URL of this service. Optional — TwiML uses relative URLs,
+      # so leave blank and it still works. Set it to your Render URL
+      # (https://dental-receptionist-agent.onrender.com) if you want absolute URLs.
+      - key: PUBLIC_BASE_URL
+        sync: false
+
+      # Anthropic (Claude). Leave blank to run the regex fallback.
+      - key: ANTHROPIC_API_KEY
+        sync: false
+      - key: ANTHROPIC_MODEL
+        value: claude-sonnet-4-6
+
+      # Twilio
+      - key: TWILIO_ACCOUNT_SID
+        sync: false
+      - key: TWILIO_AUTH_TOKEN
+        sync: false
+
+      # Email (SMTP). Leave blank to log emails to the service logs.
+      - key: SMTP_HOST
+        sync: false
+      - key: SMTP_PORT
+        value: "587"
+      - key: SMTP_USER
+        sync: false
+      - key: SMTP_PASS
+        sync: false
+      - key: EMAIL_FROM
+        sync: false
+
+      # Google Calendar (OAuth 2.0). Leave blank for the in-memory mock.
+      - key: GOOGLE_CLIENT_ID
+        sync: false
+      - key: GOOGLE_CLIENT_SECRET
+        sync: false
+      - key: GOOGLE_REDIRECT_URI
+        sync: false
+      - key: GOOGLE_REFRESH_TOKEN
+        sync: false

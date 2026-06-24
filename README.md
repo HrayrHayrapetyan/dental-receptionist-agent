@@ -85,6 +85,23 @@ client config (use `primary` or the calendar's ID).
 Any SMTP provider works (SendGrid, Gmail app password, etc.). Set `SMTP_*` and
 `EMAIL_FROM`; recipient is the client config's `notificationEmail`.
 
+## Deploy to Render (one-click Blueprint)
+
+This repo ships a `render.yaml` Blueprint.
+
+1. Push the repo to GitHub (already done).
+2. In [Render](https://render.com): **New → Blueprint** → connect this repo.
+3. Render reads `render.yaml`, creates the web service, and prompts for the
+   secret env vars (`ANTHROPIC_API_KEY`, `TWILIO_*`, `SMTP_*`, `GOOGLE_*`).
+   Leave any blank to use that service's built-in fallback.
+4. Deploy. Your service is at `https://dental-receptionist-agent.onrender.com`.
+5. Verify: open `…/health` → `{"ok":true,...}`.
+6. Point each clinic's Twilio number Voice webhook to
+   `https://dental-receptionist-agent.onrender.com/voice/incoming?practiceId=<id>`.
+
+> The free plan sleeps after inactivity (first call may lag ~30s while it wakes).
+> Use the **starter** plan for an always-on production number.
+
 ## Onboarding a new practice (PRD 2.7)
 
 Drop a new file in `config/clients/<practiceId>.json`:
