@@ -1,0 +1,23 @@
+{
+  "name": "dental-receptionist-agent",
+  "version": "1.0.0",
+  "description": "AI Dental Receptionist Agent — Stage 1 MVP (voice booking, Google Calendar, email notification)",
+  "type": "module",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js",
+    "simulate": "node src/simulator/cli.js"
+  },
+  "keywords": ["twilio", "dental", "ai", "voice", "booking", "claude"],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.32.1",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.2",
+    "googleapis": "^144.0.0",
+    "nodemailer": "^6.9.16",
+    "twilio": "^5.4.0"
+  }
+}

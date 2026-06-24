@@ -1,0 +1,24 @@
+{
+  "practiceId": "demo-practice",
+  "practiceName": "Zahnarztpraxis Köln-Mitte",
+  "businessHours": {
+    "timezone": "Europe/Berlin",
+    "days": {
+      "mon": ["08:00", "18:00"],
+      "tue": ["08:00", "18:00"],
+      "wed": ["08:00", "18:00"],
+      "thu": ["08:00", "18:00"],
+      "fri": ["08:00", "14:00"],
+      "sat": null,
+      "sun": null
+    }
+  },
+  "bookableHours": ["08:00", "17:30"],
+  "slotDurationMinutes": 30,
+  "forwardingNumber": "+4922100000000",
+  "googleCalendarId": "primary",
+  "notificationEmail": "dentist@demo-practice.example.com",
+  "agentVoice": "Polly.Vicki",
+  "language": "de-DE",
+  "callRecording": false
+}
